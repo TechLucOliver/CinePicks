@@ -1,9 +1,9 @@
 package exception;
 
-public class PesoInvalidoException extends Exception {
+public class PesoInvalidoException extends RuntimeException {
 
-	public PesoInvalidoException(String string) {
-		// TODO Auto-generated constructor stub
+	public PesoInvalidoException(String mensagem) {
+		super(mensagem);
 	}
 
 }

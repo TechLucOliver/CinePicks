@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import exception.DuracaoInvalidaException;
+import exception.NotaInvalidaException;
 import exception.PesoInvalidoException;
 import model.enums.ClassificacaoEtaria;
 import model.enums.Genero;
@@ -20,7 +21,7 @@ public class PerfilCinefilo {
 	private List<String> historicoFilmesAssistidos = new ArrayList<>();
 	private Map<String, Integer> notasFilmes = new HashMap<>();
 	
-	public PerfilCinefilo(int duracaoMaxima, int duracaoMinima) throws DuracaoInvalidaException {
+	public PerfilCinefilo(int duracaoMaxima, int duracaoMinima) {
 		if(duracaoMinima > duracaoMaxima) {
 			throw new DuracaoInvalidaException("A duração mínima não pode ser maior do que a duração máxima!");
 		}
@@ -28,7 +29,7 @@ public class PerfilCinefilo {
 		this.duracaoMinima = duracaoMinima;
 	}
 	
-	public void setPeso(Genero genero, double peso) throws PesoInvalidoException {
+	public void setPeso(Genero genero, double peso) {
 		if (peso < 0.0 || peso > 1.0) {
 			throw new PesoInvalidoException("O peso deve estar entre 0.0 e 1.0");
 		}
@@ -67,8 +68,11 @@ public class PerfilCinefilo {
 		return notasFilmes;
 	}
 
-	public void setNotasFilmes(Map<String, Integer> notasFilmes) {
-		this.notasFilmes = notasFilmes;
+	public void adicionarNota(String idFilme, int nota) {
+		if (nota < 1 || nota > 5) {
+			throw new NotaInvalidaException("A nota deve estar entre 1 e 5");
+		}
+		this.notasFilmes.put(idFilme, nota);
 	}
 
 	public Map<Genero, Double> getPesosGeneros() {

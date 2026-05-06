@@ -17,6 +17,7 @@ public class Filme {
 	private final Idioma idioma;
 	private final int popularidade;
 	
+	
 	public Filme(String id, String titulo, int ano, int duracao, List<Genero> generos,
 			ClassificacaoEtaria classificacao, Idioma idioma, int popularidade) {
 		this.id = id;

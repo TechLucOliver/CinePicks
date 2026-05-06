@@ -1,9 +1,9 @@
 package exception;
 
-public class DuracaoInvalidaException extends Exception {
+public class DuracaoInvalidaException extends RuntimeException {
 
-	public DuracaoInvalidaException(String string) {
-		// TODO Auto-generated constructor stub
+	public DuracaoInvalidaException(String mensagem) {
+		super(mensagem);
 	}
 
 }
