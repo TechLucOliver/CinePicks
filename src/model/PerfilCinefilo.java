@@ -34,7 +34,11 @@ public class PerfilCinefilo {
 		}
 		pesosGeneros.put(genero, peso);
 	}
-
+	
+	public double getPeso(Genero genero) {
+		return pesosGeneros.getOrDefault(genero, 0.5);
+	}
+	
 	public ClassificacaoEtaria getClassificacaoMaxima() {
 		return classificacaoMaxima;
 	}
@@ -47,16 +51,16 @@ public class PerfilCinefilo {
 		return idiomasAceitos;
 	}
 
-	public void setIdiomasAceitos(List<Idioma> idiomasAceitos) {
-		this.idiomasAceitos = idiomasAceitos;
+	public void adicionarIdiomaAceito(Idioma idioma) {
+		this.idiomasAceitos.add(idioma);
 	}
 
 	public List<String> getHistoricoFilmesAssistidos() {
 		return historicoFilmesAssistidos;
 	}
 
-	public void setHistoricoFilmesAssistidos(List<String> historicoFilmesAssistidos) {
-		this.historicoFilmesAssistidos = historicoFilmesAssistidos;
+	public void adicionarNoHistorico(String tituloFilme) {
+		this.historicoFilmesAssistidos.add(tituloFilme);
 	}
 
 	public Map<String, Integer> getNotasFilmes() {

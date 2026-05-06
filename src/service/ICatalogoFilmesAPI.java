@@ -1,5 +1,9 @@
 package service;
 
-public interface ICatalogoFilmesAPI {
+import java.util.List;
 
+import model.Filme;
+
+public interface ICatalogoFilmesAPI {
+	List<Filme> buscaTodosFilmes();
 }
