@@ -55,8 +55,33 @@ public class RecomendadorService {
 				.collect(Collectors.toList());
 		
 		historico.registrarRecomendacao(usuario, recomendacoes);
-		notificador.enviarNotificacao("Você tem uma nova recomendação!");
+		
+		if (usuario.isNotificacoesLigadas()) {
+			notificador.enviarNotificacao("Você tem uma nova recomendação!");
+		}
 		
 		return recomendacoes;
+	}
+	
+	public Recomendacao recomendarAleatorio(Usuario usuario) {
+		List<Filme> todosOsFilmes;
+		
+		try {
+			todosOsFilmes = catalogo.buscaTodosFilmes();
+		}catch (Exception e) {
+			return null;
+		}
+		
+		List<Filme> filtrados = filtro.filtrar(todosOsFilmes, usuario.getPerfil());
+		if (filtrados.isEmpty()) {
+			return null;
+		}
+		
+		int indiceSorteado = gerador.sortearInteiro(0, filtrados.size() - 1);
+		Filme filmeSorteado = filtrados.get(indiceSorteado);
+		
+		return new Recomendacao(filmeSorteado, 
+				calculadora.calcular(filmeSorteado, usuario.getPerfil()), 
+				"Selecionamos este filme diretamente para você!");
 	}
 }

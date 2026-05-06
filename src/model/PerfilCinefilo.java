@@ -75,8 +75,8 @@ public class PerfilCinefilo {
 		this.notasFilmes.put(idFilme, nota);
 	}
 
-	public Map<Genero, Double> getPesosGeneros() {
-		return pesosGeneros;
+	public double getPesosGeneros(Genero genero) {
+		return pesosGeneros.get(genero);
 	}
 
 	public int getDuracaoMaxima() {
