@@ -1,8 +1,6 @@
 package test;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +17,7 @@ public class PerfilCinefiloTest {
 	
 	@BeforeEach
 	void setUp() {
-		perfil = new PerfilCinefilo(90, 150);
+		perfil = new PerfilCinefilo(150, 90);
 	}
 	
 	@Test
@@ -39,7 +37,7 @@ public class PerfilCinefiloTest {
 	@Test
 	@DisplayName("Deve lançar exceção se duração mínima for maior que a máxima")
 	void deveLancarExcecaoQuandoDuracaoMinimaForMaiorQueMaxima() {
-		assertThrows(DuracaoInvalidaException.class, () -> new PerfilCinefilo(150, 90));
+		assertThrows(DuracaoInvalidaException.class, () -> new PerfilCinefilo(90, 150));
 	}
 	
 	@Test

@@ -1,7 +1,6 @@
 package test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class FiltroFilmesTest {
 	@BeforeEach
 	void setUp() {
 		filtro = new FiltroFilmes();
-		perfil = new PerfilCinefilo(90, 150);
+		perfil = new PerfilCinefilo(150, 90);
 		perfil.setClassificacaoMaxima(ClassificacaoEtaria.DEZESSEIS);
 		perfil.adicionarIdiomaAceito(Idioma.EN);
 		
@@ -101,7 +100,7 @@ public class FiltroFilmesTest {
 	@Test
 	@DisplayName("Deve remover filme se a pessoa explicitamente não gosta do gênero (peso 0.0)")
 	void deveRemoverFilmeQuandoGeneroTemPesoZero() {
-		perfil.setPeso(Genero.ACAO, 0.0);
+		perfil.setPeso(Genero.ROMANCE, 0.0);
 		
 		List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
 		

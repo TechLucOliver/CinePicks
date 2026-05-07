@@ -24,7 +24,7 @@ public class CalculadoraScoreTest {
 	@BeforeEach
 	void setUp() {
 		calculadora = new CalculadoraScore();
-		perfil = new PerfilCinefilo(90, 150);
+		perfil = new PerfilCinefilo(150, 90);
 	}
 	
 	@ParameterizedTest
