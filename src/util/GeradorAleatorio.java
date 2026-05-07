@@ -1,5 +1,5 @@
 package util;
 
-public interface IGeradorAleatorio {
+public interface GeradorAleatorio {
 	int sortearInteiro(int minimo, int maximo);
 }

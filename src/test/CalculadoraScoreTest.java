@@ -1,5 +1,7 @@
 package test;
 
+import org.junit.jupiter.api.Tag;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import model.enums.Genero;
 import model.enums.Idioma;
 import service.CalculadoraScore;
 
+
+@Tag("unitario")
 public class CalculadoraScoreTest {
 	private CalculadoraScore calculadora;
 	private PerfilCinefilo perfil;
@@ -34,7 +38,7 @@ public class CalculadoraScoreTest {
 		"0.0, 0.0, 0.0"
 	})
 	@DisplayName("Score do componente gênero deve seguir a média dos pesos")
-	void deveCalcularScoreDoGeneroConformeOsPesos(double peso1, double peso2, double pesoEsperado) {
+	void deve_CalcularScoreDoGenero_ConformeOsPesos(double peso1, double peso2, double pesoEsperado) {
 		perfil.setPeso(Genero.ACAO, peso1);
 		perfil.setPeso(Genero.DRAMA, peso2);
 		
@@ -51,7 +55,7 @@ public class CalculadoraScoreTest {
 		"80, 80"
 	})
 	@DisplayName("Filme dentro da duração deve ter score de duração 100, fora deve ser reduzido")
-	void deveCalcularScoreDeDuracaoCorretamente(int duracaoFilme, double componenteEsperado) {
+	void deve_CalcularScoreDeDuracao_Corretamente(int duracaoFilme, double componenteEsperado) {
 		Filme filme = new Filme("F10", "Teste", 2024, duracaoFilme, List.of(Genero.ACAO), ClassificacaoEtaria.DEZESSEIS, Idioma.EN, 0);
 		
 		int scoreFinal = calculadora.calcular(filme, perfil);
@@ -61,7 +65,7 @@ public class CalculadoraScoreTest {
 	
 	@Test
 	@DisplayName("Score total nunca passa de 100")
-	void deveManterScoreEntre0e100QuandoExtremos() {
+	void deve_ManterScoreEntre0e100_QuandoExtremos() {
 		perfil.setPeso(Genero.ACAO, 1.0);
 		perfil.adicionarNota("Filme qualquer", 5);
 		Filme filmePerfeito = new Filme("F11", "Vingadores: Guerra Infinita", 2018, 149, List.of(Genero.ACAO, Genero.FICCAO_CIENTIFICA), ClassificacaoEtaria.DOZE, Idioma.EN, 100);

@@ -1,5 +1,5 @@
 package service;
 
-public interface INotificadorPush {
+public interface NotificadorPush {
 	void enviarNotificacao(String mensagem);
 }

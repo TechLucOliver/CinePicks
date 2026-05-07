@@ -5,6 +5,6 @@ import java.util.List;
 import model.Recomendacao;
 import model.Usuario;
 
-public interface IHistoricoUsuarioRepository {
+public interface HistoricoUsuarioRepository {
 	void registrarRecomendacao(Usuario usuario, List<Recomendacao> recomendacoes);
 }

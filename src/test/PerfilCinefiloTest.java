@@ -1,6 +1,9 @@
 package test;
 
+import org.junit.jupiter.api.Tag;
+
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +15,7 @@ import exception.PesoInvalidoException;
 import model.PerfilCinefilo;
 import model.enums.Genero;
 
+@Tag("unitario")
 public class PerfilCinefiloTest {
 	private PerfilCinefilo perfil;
 	
@@ -20,37 +24,48 @@ public class PerfilCinefiloTest {
 		perfil = new PerfilCinefilo(150, 90);
 	}
 	
+	@AfterEach
+	void tearDown() {
+		perfil = null;
+	}
+	
 	@Test
 	@DisplayName("Deve permitir criar perfil com pesos válidos")
-	void deveCriarPerfilQuandoPesosForemValidos() {
+	void deve_CriarPerfil_Quando_PesosForemValidos() {
 		perfil.setPeso(Genero.ACAO, 0.8);
 		assertEquals(0.8, perfil.getPeso(Genero.ACAO));
 	}
 	
 	@Test
 	@DisplayName("Deve lançar exceção ao tentar colocar peso fora do intervalo 0.0 a 1.0")
-	void deveLancarExcecaoQuandoPesoForInvalido() {
+	void deve_LancarExcecao_Quando_PesoForInvalido() {
 		assertThrows(PesoInvalidoException.class, () -> perfil.setPeso(Genero.ACAO, 1.5));
 		assertThrows(PesoInvalidoException.class, () -> perfil.setPeso(Genero.DRAMA, -0.1));
 	}
 	
 	@Test
 	@DisplayName("Deve lançar exceção se duração mínima for maior que a máxima")
-	void deveLancarExcecaoQuandoDuracaoMinimaForMaiorQueMaxima() {
+	void deve_LancarExcecao_Quando_DuracaoMinimaForMaiorQueMaxima() {
 		assertThrows(DuracaoInvalidaException.class, () -> new PerfilCinefilo(90, 150));
 	}
 	
 	@Test
 	@DisplayName("Deve lançar exceção ao adicionar nota fora do intervalo 1 a 5")
-	void deveLancarExcecaoQuandoNotaEstiverForaDoIntervalo() {
+	void deve_LancarExcecao_Quando_NotaEstiverForaDoIntervalo() {
 		assertThrows(NotaInvalidaException.class, () -> perfil.adicionarNota("F01", 6));
 		assertThrows(NotaInvalidaException.class, () -> perfil.adicionarNota("F02", 0));
 	}
 	
 	@Test
 	@DisplayName("Filme marcado como assistido deve aparecer no histórico")
-	void deveAdicionarAoHistoricoQuandoMarcarFilmeAssistido() {
+	void deve_AdicionarAoHistorico_Quando_MarcarFilmeAssistido() {
 		perfil.adicionarNoHistorico("O Iluminado");
 		assertTrue(perfil.getHistoricoFilmesAssistidos().contains("O Iluminado"));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar null ao buscar nota de um filme nunca avaliado")
+	void deve_RetornarNull_Quando_FilmeNaoAvaliado() {
+		assertNull(perfil.getNotasFilmes().get("filme-não-avaliado"));
 	}
 }

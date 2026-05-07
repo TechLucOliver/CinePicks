@@ -1,5 +1,7 @@
 package test;
 
+import org.junit.jupiter.api.Tag;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,16 +16,17 @@ import model.enums.ClassificacaoEtaria;
 import model.enums.Genero;
 import model.enums.Idioma;
 
+@Tag("unitario")
 public class FilmeTest {
 	@Test
 	@DisplayName("Deve preencher todos os atributos corretamente quando o filme é criado")
-	void devePreencherAtributosQuandoFilmeCriado() {
+	void deve_PreencherAtributos_Quando_FilmeCriado() {
 		Filme filme = new Filme(
 				"F01", 
 				"Duna: Parte Dois", 
 				2024, 
 				166, 
-				List.of(Genero.FICCAO_CIENTIFICA, Genero.DRAMA), 
+				List.of(Genero.FICCAO_CIENTIFICA, Genero.DRAMA),
 				ClassificacaoEtaria.QUATORZE, 
 				Idioma.EN, 
 				92);
@@ -38,7 +41,7 @@ public class FilmeTest {
 	
 	@Test
 	@DisplayName("Dois filmes com o mesmo ID devem ser considerados iguais")
-	void deveConsiderarIguaisQuandoFilmesTemMesmoId() {
+	void deve_ConsiderarIguais_Quando_FilmesTemMesmoId() {
 		Filme filme1 = new Filme(
 				"F01", 
 				"Duna", 

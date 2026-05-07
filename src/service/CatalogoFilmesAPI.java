@@ -4,6 +4,6 @@ import java.util.List;
 
 import model.Filme;
 
-public interface ICatalogoFilmesAPI {
+public interface CatalogoFilmesAPI {
 	List<Filme> buscaTodosFilmes();
 }

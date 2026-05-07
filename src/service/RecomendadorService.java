@@ -8,18 +8,18 @@ import java.util.stream.Collectors;
 import model.Filme;
 import model.Recomendacao;
 import model.Usuario;
-import util.IGeradorAleatorio;
+import util.GeradorAleatorio;
 
 public class RecomendadorService {
-	private final ICatalogoFilmesAPI catalogo;
-	private final IHistoricoUsuarioRepository historico;
-	private final INotificadorPush notificador;
-	private final IGeradorAleatorio gerador;
+	private final CatalogoFilmesAPI catalogo;
+	private final HistoricoUsuarioRepository historico;
+	private final NotificadorPush notificador;
+	private final GeradorAleatorio gerador;
 	private final CalculadoraScore calculadora;
 	private final FiltroFilmes filtro;
 	
-	public RecomendadorService(ICatalogoFilmesAPI catalogo, IHistoricoUsuarioRepository historico,
-			INotificadorPush notificador, IGeradorAleatorio gerador, CalculadoraScore calculadora,
+	public RecomendadorService(CatalogoFilmesAPI catalogo, HistoricoUsuarioRepository historico,
+			NotificadorPush notificador, GeradorAleatorio gerador, CalculadoraScore calculadora,
 			FiltroFilmes filtro) {
 		this.catalogo = catalogo;
 		this.historico = historico;
@@ -57,7 +57,11 @@ public class RecomendadorService {
 		historico.registrarRecomendacao(usuario, recomendacoes);
 		
 		if (usuario.isNotificacoesLigadas()) {
-			notificador.enviarNotificacao("Você tem uma nova recomendação!");
+			try {
+				notificador.enviarNotificacao("Você tem uma nova recomendação!");
+			} catch (Exception e) {
+				//
+			}
 		}
 		
 		return recomendacoes;

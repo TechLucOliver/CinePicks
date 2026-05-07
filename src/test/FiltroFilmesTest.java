@@ -1,6 +1,9 @@
 package test;
 
+import org.junit.jupiter.api.Tag;
+
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Nested;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,7 @@ import model.enums.Genero;
 import model.enums.Idioma;
 import service.FiltroFilmes;
 
+@Tag("unitario")
 public class FiltroFilmesTest {
 	private FiltroFilmes filtro;
 	private PerfilCinefilo perfil;
@@ -40,18 +44,25 @@ public class FiltroFilmesTest {
 		);
 	}
 	
-	@Test
-	@DisplayName("Deve retornar lista vazia (nunca null) quando o catálogo for vazio")
-	void deveRetornarListaVaziaQuandoCatalogoEstaVazio() {
-		List<Filme> resultado = filtro.filtrar(new ArrayList<>(), perfil);
+	@Nested
+	@DisplayName("Cenários: Quando o Catálogo está Vazio")
+	class QuandoCatalogoEstaVazio {
 		
-		assertNotNull(resultado);
-		assertTrue(resultado.isEmpty());
+		@Test
+		@DisplayName("Deve retornar lista vazia (nunca null) quando o catálogo for vazio")
+		void deve_RetornarListaVazia_Quando_CatalogoEstaVazio() {
+			List<Filme> resultado = filtro.filtrar(new ArrayList<>(), perfil);
+			
+			assertNotNull(resultado);
+			assertTrue(resultado.isEmpty());
+		}
 	}
+	
+	
 	
 	@Test
 	@DisplayName("Deve remover filme do catálogo se já foi assistido")
-	void deveRemoverFilmeQuandoJaFoiAssistido() {
+	void deve_RemoverFilme_Quando_JaFoiAssistido() {
 		perfil.adicionarNoHistorico("Ela (Her)");
 		
 		List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
@@ -61,7 +72,7 @@ public class FiltroFilmesTest {
 	
 	@Test
 	@DisplayName("Deve remover filme se a classificação for maior que a permitida")
-	void deveRemoverFilmeQuandoAcimaDaClassificacaoDoUsuario() {
+	void deve_RemoverFilme_Quando_AcimaDaClassificacaoDoUsuario() {
 		Filme filmeAcimaDaIdadeDoUsuario = new Filme(
 				"F05", 
 				"Tropa de Elite", 
@@ -80,7 +91,7 @@ public class FiltroFilmesTest {
 	
 	@Test
 	@DisplayName("Deve remover filme se estiver em idioma não preferido pelo usuario")
-	void deveRemoverFilmeQuandoIdiomaAceito() {
+	void deve_RemoverFilme_Quando_IdiomaAceito() {
 		Filme filmeFrances = new Filme(
 				"F08", 
 				"Intocáveis", 
@@ -99,12 +110,21 @@ public class FiltroFilmesTest {
 	
 	@Test
 	@DisplayName("Deve remover filme se a pessoa explicitamente não gosta do gênero (peso 0.0)")
-	void deveRemoverFilmeQuandoGeneroTemPesoZero() {
+	void deve_RemoverFilme_Quando_GeneroTemPesoZero() {
 		perfil.setPeso(Genero.ROMANCE, 0.0);
 		
 		List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
 		
 		assertTrue(resultado.isEmpty());
+	}
+	
+	@Test
+	@DisplayName("A lista filtrada não deve conter filme já assistido")
+	void naoDeve_ConterFilmeAssistido() {
+		perfil.adicionarNoHistorico(filme.getTitulo());
+		List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
+		
+		assertFalse(resultado.contains(filme), "O filme assistido deve ser removido");
 	}
 	
 	
