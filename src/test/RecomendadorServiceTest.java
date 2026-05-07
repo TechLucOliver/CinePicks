@@ -2,12 +2,15 @@ package test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.Spy;
+import org.junit.jupiter.api.Tag;
 
 import java.util.List;
 
@@ -18,6 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.sun.tools.javac.jvm.Gen;
 
 import model.Filme;
 import model.PerfilCinefilo;
@@ -41,7 +46,7 @@ public class RecomendadorServiceTest {
 	@Mock private INotificadorPush notificador;
 	@Mock private IGeradorAleatorio gerador;
 	
-	private CalculadoraScore calculadora;
+	@Spy private CalculadoraScore calculadora;
 	private FiltroFilmes filtro;
 	private RecomendadorService service;
 	
@@ -51,7 +56,6 @@ public class RecomendadorServiceTest {
 	
 	@BeforeEach
 	void setUp() {
-		calculadora = new CalculadoraScore();
 		filtro = new FiltroFilmes();
 		
 		service = new RecomendadorService(catalogo, historico, notificador, gerador, calculadora, filtro);
@@ -120,7 +124,42 @@ public class RecomendadorServiceTest {
 		verify(notificador, times(1)).enviarNotificacao(anyString());
 	}
 	
+	@Test
+	@DisplayName("Deve usar Spy para verificar quantas vezes a CalculadoraScore foi chamada")
+	void deveVerificarChamadasNaCalculadoraComSpy() {
+		when(catalogo.buscaTodosFilmes()).thenReturn(List.of(filmeAcao, filmeComedia));
+		
+		service.recomendar(usuario, 5);
+		
+		verify(calculadora, times(2)).calcular(any(Filme.class), eq(usuario.getPerfil()));
+	}
 	
+	@Test
+	@Tag("integracao")
+	@DisplayName("Cenário de Integração: Pipeline completo (Filtro + Calculadora + Ranking)")
+	void deveExecutarPipelineCompletoDeRecomendacao() {
+		PerfilCinefilo perfilInt = new PerfilCinefilo(180, 90);
+		perfilInt.setClassificacaoMaxima(ClassificacaoEtaria.DEZESSEIS);
+		perfilInt.adicionarIdiomaAceito(Idioma.EN);
+		perfilInt.setPeso(Genero.FICCAO_CIENTIFICA, 0.9);
+		perfilInt.setPeso(Genero.DRAMA, 0.6);
+		perfilInt.setPeso(Genero.TERROR, 0.0);
+		
+		Usuario maria = new Usuario("Maria", 28, perfilInt);
+		
+		Filme duna = new Filme("F01", "Duna", 2024, 166, List.of(Genero.FICCAO_CIENTIFICA, Genero.DRAMA), ClassificacaoEtaria.QUATORZE, Idioma.EN, 92);
+		Filme oIluminado = new Filme("F03", "O Iluminado", 1980, 146, List.of(Genero.TERROR), ClassificacaoEtaria.DEZOITO, Idioma.EN, 88);
+		Filme aChegada = new Filme("F07", "A Chegada", 2016, 116, List.of(Genero.FICCAO_CIENTIFICA, Genero.DRAMA), ClassificacaoEtaria.DOZE, Idioma.EN, 84);
+		
+		when(catalogo.buscaTodosFilmes()).thenReturn(List.of(duna, oIluminado, aChegada));
+		
+		List<Recomendacao> resultado = service.recomendar(maria, 5);
+		
+		assertEquals(2, resultado.size(), "Deve filtrar o filme de terror e devolver apenas 2 filmes");
+		
+		assertEquals("Duna", resultado.get(0).getFilme().getTitulo(), "Duna deve ser o primeiro do ranking");
+		assertEquals("A Chegada", resultado.get(1).getFilme().getTitulo(), "A Chegada deve vir em segundo lugar");
+	}
 	
 	
 	
