@@ -1,8 +1,8 @@
 # CinePicks
 
 ## Integrantes
-- [Gabriela do Vale Bomfim de Souza]
-- [Lucas de Oliveira Ferreira dos Santos]
+- [200038160 - Gabriela do Vale Bomfim de Souza]
+- [200033683 - Lucas de Oliveira Ferreira dos Santos]
 
 ## Visão Geral
 O sistema cruza o perfil de um usuário (gêneros preferidos, duração ideal, classificação etária, etc.) com um catálogo de filmes, devolvendo uma lista ranqueada dos melhores candidatos baseada em um algoritmo de pontuação.
